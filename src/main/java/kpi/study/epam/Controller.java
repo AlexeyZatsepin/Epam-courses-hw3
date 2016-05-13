@@ -48,20 +48,24 @@ public class Controller {
 
     //Work method
     public void processUser(){
-        String name=inputValueWithScannerByRegexp(REGEX_WORD,View.FIRST_NAME_LABEL);
-        String surname=inputValueWithScannerByRegexp(REGEX_WORD,View.SECOND_NAME_LABEL);
-        String midlename=inputValueWithScannerByRegexp(REGEX_WORD,View.MIDDLE_NAME_LABEL);
-        String nickname=inputValueWithScannerByRegexp(REGEX_NICKNAME,View.NICKNAME_LABEL);
-        String comment=inputValueWithScannerByRegexp(REGEX_NOT_REQUIRED,View.COMMENT_LABEL);
-        Groups group =Groups.getName(Integer.valueOf(inputValueWithScannerByRegexp(REGEX_GROUP,View.GROUP_LABEL)));
-        String homeNumber=inputValueWithScannerByRegexp(REGEX_PHONE,View.HOME_PHONE_LABEL);
-        String mobileNumber=inputValueWithScannerByRegexp(REGEX_PHONE,View.MOBILE_NUMBER_LABEL);
-        String email=inputValueWithScannerByRegexp(REGEX_MAIL,View.EMAIL_LABEL);
-        String skype=inputValueWithScannerByRegexp(REGEX_NICKNAME,View.SKYPE_LABEL);
-        String adress=generateCommonFormAddress();
-        String mailAdress=generateMailFormAddress(adress);
+        Scanner sc = new Scanner(System.in);
+
+        String name=inputValueWithScannerByRegexp(sc,REGEX_WORD,View.FIRST_NAME_LABEL);
+        String surname=inputValueWithScannerByRegexp(sc,REGEX_WORD,View.SECOND_NAME_LABEL);
+        String midlename=inputValueWithScannerByRegexp(sc,REGEX_WORD,View.MIDDLE_NAME_LABEL);
+        String nickname=inputValueWithScannerByRegexp(sc,REGEX_NICKNAME,View.NICKNAME_LABEL);
+        String comment=inputValueWithScannerByRegexp(sc,REGEX_NOT_REQUIRED,View.COMMENT_LABEL);
+        Groups group =Groups.getName(Integer.valueOf(inputValueWithScannerByRegexp(sc,REGEX_GROUP,View.GROUP_LABEL)));
+        String homeNumber=inputValueWithScannerByRegexp(sc,REGEX_PHONE,View.HOME_PHONE_LABEL);
+        String mobileNumber=inputValueWithScannerByRegexp(sc,REGEX_PHONE,View.MOBILE_NUMBER_LABEL);
+        String email=inputValueWithScannerByRegexp(sc,REGEX_MAIL,View.EMAIL_LABEL);
+        String skype=inputValueWithScannerByRegexp(sc,REGEX_NICKNAME,View.SKYPE_LABEL);
+        String adress=generateCommonFormAddress(sc);
+        String mailAdress=generateMailFormAddress(sc,adress);
         Date created= new Date(System.currentTimeMillis());
         Date updated= new Date(System.currentTimeMillis());
+
+
         model.setInstance(generateFIO(name,surname,midlename),nickname,comment,group,homeNumber,
                 mobileNumber,email,skype,adress,mailAdress,created,updated);
 
@@ -74,8 +78,7 @@ public class Controller {
      * method for input checked data
      * @return String that maches pattern
      */
-    public String inputValueWithScannerByRegexp(String pattern,String message) {
-        Scanner sc = new Scanner(System.in);
+    public String inputValueWithScannerByRegexp(Scanner sc,String pattern,String message) {
         view.showMessage(message);
         while( !sc.hasNext(pattern)) {
             view.showMessage(View.WRONG_DATA);
@@ -98,17 +101,17 @@ public class Controller {
      * method creates  postal address that fits the common pattern
      * @return postal address
      */
-    private String generateMailFormAddress(String commonAdress) {
-        return (commonAdress +"\n" + inputValueWithScannerByRegexp(REGEX_WORD,View.CITY_LABEL) + "\n" + inputValueWithScannerByRegexp(REGEX_POST_INDEX,View.INDEX_LABEL));
+    private String generateMailFormAddress(Scanner sc,String commonAdress) {
+        return (commonAdress +"\n" + inputValueWithScannerByRegexp(sc,REGEX_WORD,View.CITY_LABEL) + "\n" + inputValueWithScannerByRegexp(sc,REGEX_POST_INDEX,View.INDEX_LABEL));
     }
 
     /**
      * method creates address that fits the common pattern
      * @return common form address
      */
-    private String generateCommonFormAddress() {
-        return ("St " + inputValueWithScannerByRegexp(REGEX_WORD,View.STREET_LABEL) + ", "
-                + inputValueWithScannerByRegexp(REGEX_BUILD_RESTRICTIONS,View.HOUSE_NUMBER_LABEL) + ", Apt "
-                + inputValueWithScannerByRegexp(REGEX_BUILD_RESTRICTIONS,View.APARTAMENT_LABEL));
+    private String generateCommonFormAddress(Scanner sc) {
+        return ("St " + inputValueWithScannerByRegexp(sc,REGEX_WORD,View.STREET_LABEL) + ", "
+                + inputValueWithScannerByRegexp(sc,REGEX_BUILD_RESTRICTIONS,View.HOUSE_NUMBER_LABEL) + ", Apt "
+                + inputValueWithScannerByRegexp(sc,REGEX_BUILD_RESTRICTIONS,View.APARTAMENT_LABEL));
     }
 }
